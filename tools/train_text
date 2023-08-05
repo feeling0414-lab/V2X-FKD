@@ -1,0 +1,16 @@
+export CUDA_VISIBLE_DEVICES=2,3
+python -m torch.distributed.launch --nproc_per_node=n_gpus train_distributed.py
+ master_port 可选
+ python -m torch.distributed.launch --nproc_per_node=2 --master_port='29020' ./v2xvit/tools/train_distributed.py --hypes_yaml /media/wanghai/NewSSD/HCZ/v2x-vit_myself/v2xvit/hypes_yaml/distillation_v2xvit.yaml
+ 
+sudo kill -9 
+
+出现内存不释放的情况时：
+发现僵尸进程
+fuser -v /dev/nvidia*
+
+删除所有僵尸进程
+fuser -v /dev/nvidia* |awk '{for(i=1;i<=NF;i++)print "kill -9 " $i;}' |  sh
+
+清理指定GPU显卡中残留进程，如GPU 2
+fuser -v /dev/nvidia2 |awk '{for(i=1;i<=NF;i++)print "kill -9 " $i;}' |  sh
